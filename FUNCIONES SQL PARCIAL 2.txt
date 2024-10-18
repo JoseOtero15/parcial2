@@ -1,0 +1,51 @@
+create or replace NONEDITIONABLE FUNCTION validar_correo(
+    correo IN VARCHAR2
+) RETURN VARCHAR2 IS
+    mensaje varchar2(100);
+    validacion BOOLEAN := FALSE;
+    tamano BOOLEAN := FALSE;
+    primeraParte BOOLEAN := FALSE;
+    terceraParte BOOLEAN := FALSE;
+    
+BEGIN
+ 
+    -- Validar longitud
+    IF LENGTH(correo) > 10 AND LENGTH(correo) < 30 THEN
+        tamano := TRUE ;
+    END IF;
+    
+    -- Verificar que contenga al menos una letra
+    IF REGEXP_LIKE( correo, '.*[a-zA-Z].*@.*') AND REGEXP_LIKE( correo, '.*\d.*@.*') AND NOT REGEXP_LIKE( correo, '.*[@\$!%*?&].*@') THEN
+        primeraParte := TRUE;
+    END IF;
+    
+    IF REGEXP_LIKE( correo, '.*@.*.com.co') THEN
+        terceraParte := TRUE;
+    END IF;
+
+    IF tamano AND primeraParte AND terceraParte THEN
+        validacion := TRUE;
+    END IF;
+    
+    if (validacion) then
+        return 'El correo es valido';
+    else
+        return 'el correo no cumple con los requisitos';
+    end if;
+        
+END validar_correo;
+
+----------------------------------------------------------------
+
+create or replace NONEDITIONABLE FUNCTION multiploDeTres(
+    numero IN NUMBER
+) RETURN VARCHAR2 IS  
+    validacion BOOLEAN := FALSE; 
+BEGIN
+    IF MOD(numero, 3) = 0 THEN
+        return 'Si es multiplo de 3';
+    ELSE
+        return 'No es multiplo de 3';
+    END IF;
+    
+END multiploDeTres;
